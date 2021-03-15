@@ -17,5 +17,5 @@ cmdX(){
 	fi
 }
 
-cmdX xyo-cc --mode=$ACTION @util/quantum-script-extension-xml.static.compile
-cmdX xyo-cc --mode=$ACTION @util/quantum-script-extension-xml.dynamic.compile
+cmdX xyo-cc --mode=$ACTION @build/source/quantum-script-extension-xml.static.compile
+cmdX xyo-cc --mode=$ACTION @build/source/quantum-script-extension-xml.dynamic.compile
