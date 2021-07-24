@@ -46,37 +46,23 @@ namespace Quantum {
 				class VariableXMLNode :
 					public Variable {
 						XYO_DISALLOW_COPY_ASSIGN_MOVE(VariableXMLNode);
+						XYO_DYNAMIC_TYPE_DEFINE(QUANTUM_SCRIPT_EXTENSION_XML_EXPORT, VariableXMLNode);
 					protected:
 						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT static const char *strTypeXMLNode;
-						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT static const char *typeXMLNodeKey;
-						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT static const void *typeXMLNode;
 					public:
 
 						TPointerX<XMLNode> value;
 
-						inline VariableXMLNode() {
-							value.pointerLink(this);
-							variableType = registerType(typeXMLNode, typeXMLNodeKey);
-						};
+						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT VariableXMLNode();
 
 						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT static Variable *newVariable();
 
-						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT String getType();
-
-						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT Variable &operatorReference(Symbol symbolId);
+						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT String getVariableType();
 
 						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT Variable *instancePrototype();
 
 						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT bool toBoolean();
 						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT String toString();
-
-						//
-						inline static bool isVariableXMLNode(const Variable *value) {
-							if(typeXMLNode == nullptr) {
-								typeXMLNode = registerType(typeXMLNode, typeXMLNodeKey);
-							};
-							return (value->variableType == typeXMLNode);
-						};
 
 				};
 

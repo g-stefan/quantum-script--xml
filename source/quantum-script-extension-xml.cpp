@@ -89,7 +89,7 @@ namespace Quantum {
 					xmlContext->prototypeXMLAttribute.newMemory();
 
 					defaultPrototypeFunction = (VariableFunction *)VariableFunction::newVariable(nullptr, nullptr, nullptr, functionXMLAttribute, nullptr, nullptr);
-					((Context::getGlobalObject())->operatorReferenceOwnProperty(xmlContext->symbolFunctionXMLAttribute))=defaultPrototypeFunction;
+					(Context::getGlobalObject())->setPropertyBySymbol(xmlContext->symbolFunctionXMLAttribute, defaultPrototypeFunction);
 					xmlContext->prototypeXMLAttribute = defaultPrototypeFunction->prototype;
 
 					//
@@ -98,7 +98,7 @@ namespace Quantum {
 					xmlContext->prototypeXMLAttributes.newMemory();
 
 					defaultPrototypeFunction = (VariableFunction *)VariableFunction::newVariable(nullptr, nullptr, nullptr, functionXMLAttributes, nullptr, nullptr);
-					((Context::getGlobalObject())->operatorReferenceOwnProperty(xmlContext->symbolFunctionXMLAttributes))=defaultPrototypeFunction;
+					(Context::getGlobalObject())->setPropertyBySymbol(xmlContext->symbolFunctionXMLAttributes, defaultPrototypeFunction);
 					xmlContext->prototypeXMLAttributes = defaultPrototypeFunction->prototype;
 
 					//
@@ -107,7 +107,7 @@ namespace Quantum {
 					xmlContext->prototypeXMLNode.newMemory();
 
 					defaultPrototypeFunction = (VariableFunction *)VariableFunction::newVariable(nullptr, nullptr, nullptr, functionXMLNode, nullptr, nullptr);
-					((Context::getGlobalObject())->operatorReferenceOwnProperty(xmlContext->symbolFunctionXMLNode))=defaultPrototypeFunction;
+					(Context::getGlobalObject())->setPropertyBySymbol(xmlContext->symbolFunctionXMLNode, defaultPrototypeFunction);
 					xmlContext->prototypeXMLNode = defaultPrototypeFunction->prototype;
 
 					//
@@ -116,7 +116,7 @@ namespace Quantum {
 					xmlContext->prototypeXMLDocument.newMemory();
 
 					defaultPrototypeFunction = (VariableFunction *)VariableFunction::newVariable(nullptr, nullptr, nullptr, functionXMLDocument, nullptr, nullptr);
-					((Context::getGlobalObject())->operatorReferenceOwnProperty(xmlContext->symbolFunctionXMLDocument))=defaultPrototypeFunction;
+					(Context::getGlobalObject())->setPropertyBySymbol(xmlContext->symbolFunctionXMLDocument, defaultPrototypeFunction);
 					xmlContext->prototypeXMLDocument = defaultPrototypeFunction->prototype;
 
 				};
@@ -143,7 +143,7 @@ namespace Quantum {
 					printf("- xml-document-save\n");
 
 #endif
-					if(!VariableXMLDocument::isVariableXMLDocument(this_)) {
+					if(!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -162,7 +162,7 @@ namespace Quantum {
 					printf("- xml-attribute-get-name\n");
 
 #endif
-					if(!VariableXMLAttribute::isVariableXMLAttribute(this_)) {
+					if(!TIsType<VariableXMLAttribute>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -179,7 +179,7 @@ namespace Quantum {
 					printf("- xml-attribute-set-name\n");
 
 #endif
-					if(!VariableXMLAttribute::isVariableXMLAttribute(this_)) {
+					if(!TIsType<VariableXMLAttribute>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -198,7 +198,7 @@ namespace Quantum {
 					printf("- xml-attribute-get-value\n");
 
 #endif
-					if(!VariableXMLAttribute::isVariableXMLAttribute(this_)) {
+					if(!TIsType<VariableXMLAttribute>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -214,7 +214,7 @@ namespace Quantum {
 					printf("- xml-attribute-set-value\n");
 
 #endif
-					if(!VariableXMLAttribute::isVariableXMLAttribute(this_)) {
+					if(!TIsType<VariableXMLAttribute>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -232,7 +232,7 @@ namespace Quantum {
 					printf("- xml-attributes-get-index\n");
 
 #endif
-					if(!VariableXMLAttributes::isVariableXMLAttributes(this_)) {
+					if(!TIsType<VariableXMLAttributes>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -258,7 +258,7 @@ namespace Quantum {
 					printf("- xml-attributes-setIndex\n");
 
 #endif
-					if(!VariableXMLAttributes::isVariableXMLAttributes(this_)) {
+					if(!TIsType<VariableXMLAttributes>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -268,7 +268,7 @@ namespace Quantum {
 
 					size_t index = (arguments->index(0))->toIndex();
 
-					if(!VariableXMLAttribute::isVariableXMLAttribute(arguments->index(1))) {
+					if(!TIsType<VariableXMLAttribute>(arguments->index(1))) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -285,7 +285,7 @@ namespace Quantum {
 					printf("- xml-attributes-length\n");
 
 #endif
-					if(!VariableXMLAttributes::isVariableXMLAttributes(this_)) {
+					if(!TIsType<VariableXMLAttributes>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -301,7 +301,7 @@ namespace Quantum {
 					printf("- xml-node-get-type\n");
 
 #endif
-					if(!VariableXMLNode::isVariableXMLNode(this_)) {
+					if(!TIsType<VariableXMLNode>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -318,7 +318,7 @@ namespace Quantum {
 					printf("- xml-node-set-type\n");
 
 #endif
-					if(!VariableXMLNode::isVariableXMLNode(this_)) {
+					if(!TIsType<VariableXMLNode>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -336,7 +336,7 @@ namespace Quantum {
 					printf("- xml-node-get-name\n");
 
 #endif
-					if(!VariableXMLNode::isVariableXMLNode(this_)) {
+					if(!TIsType<VariableXMLNode>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -352,7 +352,7 @@ namespace Quantum {
 					printf("- xml-node-name\n");
 
 #endif
-					if(!VariableXMLNode::isVariableXMLNode(this_)) {
+					if(!TIsType<VariableXMLNode>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -370,7 +370,7 @@ namespace Quantum {
 					printf("- xml-node-get-attributes\n");
 
 #endif
-					if(!VariableXMLNode::isVariableXMLNode(this_)) {
+					if(!TIsType<VariableXMLNode>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -388,7 +388,7 @@ namespace Quantum {
 					printf("- xml-node-set-attributes\n");
 
 #endif
-					if(!VariableXMLNode::isVariableXMLNode(this_)) {
+					if(!TIsType<VariableXMLNode>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -396,7 +396,7 @@ namespace Quantum {
 						((VariableXMLNode *)this_)->value.newMemory();
 					};
 
-					if(!VariableXMLAttributes::isVariableXMLAttributes(arguments->index(1))) {
+					if(!TIsType<VariableXMLAttributes>(arguments->index(1))) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -414,7 +414,7 @@ namespace Quantum {
 
 #endif
 
-					if(!VariableXMLNode::isVariableXMLNode(this_)) {
+					if(!TIsType<VariableXMLNode>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -439,7 +439,7 @@ namespace Quantum {
 
 #endif
 
-					if(!VariableXMLNode::isVariableXMLNode(this_)) {
+					if(!TIsType<VariableXMLNode>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -447,7 +447,7 @@ namespace Quantum {
 						((VariableXMLNode *)this_)->value.newMemory();
 					};
 
-					if(!VariableXMLDocument::isVariableXMLDocument(arguments->index(1))) {
+					if(!TIsType<VariableXMLDocument>(arguments->index(1))) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -463,7 +463,7 @@ namespace Quantum {
 					printf("- xml-document-length\n");
 
 #endif
-					if(!VariableXMLDocument::isVariableXMLDocument(this_)) {
+					if(!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -480,7 +480,7 @@ namespace Quantum {
 					printf("- xml-document-get-index\n");
 
 #endif
-					if(!VariableXMLDocument::isVariableXMLDocument(this_)) {
+					if(!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -504,7 +504,7 @@ namespace Quantum {
 					printf("- xml-document-set-index\n");
 
 #endif
-					if(!VariableXMLDocument::isVariableXMLDocument(this_)) {
+					if(!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -512,7 +512,7 @@ namespace Quantum {
 						((VariableXMLDocument *)this_)->value.newMemory();
 					};
 
-					if(!VariableXMLNode::isVariableXMLNode(arguments->index(1))) {
+					if(!TIsType<VariableXMLNode>(arguments->index(1))) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -529,7 +529,7 @@ namespace Quantum {
 					printf("- xml-document-add\n");
 
 #endif
-					if(!VariableXMLDocument::isVariableXMLDocument(this_)) {
+					if(!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -537,7 +537,7 @@ namespace Quantum {
 						((VariableXMLDocument *)this_)->value.newMemory();
 					};
 
-					if(VariableXMLNode::isVariableXMLNode(arguments->index(0))) {
+					if(TIsType<VariableXMLNode>(arguments->index(0))) {
 						if(!((VariableXMLNode *)((arguments->index(0)).value()))->value) {
 							((VariableXMLNode *)((arguments->index(0)).value()))->value.newMemory();
 						};
@@ -556,7 +556,7 @@ namespace Quantum {
 					printf("- xml-document-get\n");
 
 #endif
-					if(!VariableXMLDocument::isVariableXMLDocument(this_)) {
+					if(!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -582,7 +582,7 @@ namespace Quantum {
 					printf("- xml-document-find\n");
 
 #endif
-					if(!VariableXMLDocument::isVariableXMLDocument(this_)) {
+					if(!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -608,7 +608,7 @@ namespace Quantum {
 					printf("- xml-document-find-with-attribute-value\n");
 
 #endif
-					if(!VariableXMLDocument::isVariableXMLDocument(this_)) {
+					if(!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -634,11 +634,11 @@ namespace Quantum {
 					printf("- xml-document-add-document\n");
 
 #endif
-					if(!VariableXMLDocument::isVariableXMLDocument(this_)) {
+					if(!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!VariableXMLDocument::isVariableXMLDocument(arguments->index(0))) {
+					if(!TIsType<VariableXMLDocument>(arguments->index(0))) {
 						throw(Error("invalid parameter"));
 					};
 
@@ -661,11 +661,11 @@ namespace Quantum {
 					printf("- xml-document-add-list\n");
 
 #endif
-					if(!VariableXMLDocument::isVariableXMLDocument(this_)) {
+					if(!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!VariableXMLDocument::isVariableXMLDocument(arguments->index(0))) {
+					if(!TIsType<VariableXMLDocument>(arguments->index(0))) {
 						throw(Error("invalid parameter"));
 					};
 

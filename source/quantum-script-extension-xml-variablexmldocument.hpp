@@ -46,37 +46,23 @@ namespace Quantum {
 				class VariableXMLDocument :
 					public Variable {
 						XYO_DISALLOW_COPY_ASSIGN_MOVE(VariableXMLDocument);
+						XYO_DYNAMIC_TYPE_DEFINE(QUANTUM_SCRIPT_EXTENSION_XML_EXPORT, VariableXMLDocument);
 					protected:
 						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT static const char *strTypeXMLDocument;
-						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT static const char *typeXMLDocumentKey;
-						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT static const void *typeXMLDocument;
 					public:
 
 						TPointerX<XMLDocument> value;
 
-						inline VariableXMLDocument() {
-							value.pointerLink(this);
-							variableType = registerType(typeXMLDocument, typeXMLDocumentKey);
-						};
+						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT VariableXMLDocument();
 
 						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT static Variable *newVariable();
 
-						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT String getType();
-
-						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT Variable &operatorReference(Symbol symbolId);
+						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT String getVariableType();
 
 						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT Variable *instancePrototype();
 
 						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT bool toBoolean();
 						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT String toString();
-
-						//
-						inline static bool isVariableXMLDocument(const Variable *value) {
-							if(typeXMLDocument == nullptr) {
-								typeXMLDocument = registerType(typeXMLDocument, typeXMLDocumentKey);
-							};
-							return (value->variableType == typeXMLDocument);
-						};
 
 				};
 

@@ -30,20 +30,19 @@ namespace Quantum {
 				using namespace XYO;
 				using namespace Quantum::Script;
 
-				const char *VariableXMLAttributes::typeXMLAttributesKey = "{640ABD57-96BE-426F-8CC7-6B92A437AD1C}";
-				const void *VariableXMLAttributes::typeXMLAttributes;
+				XYO_DYNAMIC_TYPE_IMPLEMENT(VariableXMLAttributes, "{640ABD57-96BE-426F-8CC7-6B92A437AD1C}");
 				const char *VariableXMLAttributes::strTypeXMLAttributes = "XMLAttributes";
 
-				String VariableXMLAttributes::getType() {
+				VariableXMLAttributes::VariableXMLAttributes() {
+					XYO_DYNAMIC_TYPE_PUSH(VariableXMLAttributes);
+				};
+
+				String VariableXMLAttributes::getVariableType() {
 					return strTypeXMLAttributes;
 				};
 
 				Variable *VariableXMLAttributes::newVariable() {
 					return (Variable *) TMemory<VariableXMLAttributes>::newMemory();
-				};
-
-				Variable &VariableXMLAttributes::operatorReference(Symbol symbolId) {
-					return operatorReferenceX(symbolId, (Extension::XML::getContext())->prototypeXMLAttributes->prototype);
 				};
 
 				Variable *VariableXMLAttributes::instancePrototype() {

@@ -30,20 +30,20 @@ namespace Quantum {
 				using namespace XYO;
 				using namespace Quantum::Script;
 
-				const char *VariableXMLNode::typeXMLNodeKey = "{F271D918-1AAC-4D19-845E-985F97B069C5}";
-				const void *VariableXMLNode::typeXMLNode;
+				XYO_DYNAMIC_TYPE_IMPLEMENT(VariableXMLNode, "{F271D918-1AAC-4D19-845E-985F97B069C5}");
 				const char *VariableXMLNode::strTypeXMLNode = "XMLNode";
 
-				String VariableXMLNode::getType() {
+				VariableXMLNode::VariableXMLNode() {
+					XYO_DYNAMIC_TYPE_PUSH(VariableXMLNode);
+					value.pointerLink(this);
+				};
+
+				String VariableXMLNode::getVariableType() {
 					return strTypeXMLNode;
 				};
 
 				Variable *VariableXMLNode::newVariable() {
 					return (Variable *) TMemory<VariableXMLNode>::newMemory();
-				};
-
-				Variable &VariableXMLNode::operatorReference(Symbol symbolId) {
-					return operatorReferenceX(symbolId, (Extension::XML::getContext())->prototypeXMLNode->prototype);
 				};
 
 				Variable *VariableXMLNode::instancePrototype() {
