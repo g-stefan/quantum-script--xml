@@ -11,7 +11,7 @@
 #define QUANTUM_SCRIPT_EXTENSION_XML_VARIABLEXMLATTRIBUTES_HPP
 
 #ifndef QUANTUM_SCRIPT_VARIABLE_HPP
-#include "quantum-script-variable.hpp"
+#	include "quantum-script-variable.hpp"
 #endif
 
 namespace Quantum {
@@ -26,12 +26,10 @@ namespace Quantum {
 	};
 };
 
-
 namespace XYO {
 	namespace ManagedMemory {
-		template<>
-		class TMemory<Quantum::Script::Extension::XML::VariableXMLAttributes>:
-			public TMemoryPoolActive<Quantum::Script::Extension::XML::VariableXMLAttributes> {};
+		template <>
+		class TMemory<Quantum::Script::Extension::XML::VariableXMLAttributes> : public TMemoryPoolActive<Quantum::Script::Extension::XML::VariableXMLAttributes> {};
 	};
 };
 
@@ -43,14 +41,14 @@ namespace Quantum {
 				using namespace XYO;
 				using namespace Quantum::Script;
 
-				class VariableXMLAttributes :
-					public Variable {
+				class VariableXMLAttributes : public Variable {
 						XYO_DISALLOW_COPY_ASSIGN_MOVE(VariableXMLAttributes);
 						XYO_DYNAMIC_TYPE_DEFINE(QUANTUM_SCRIPT_EXTENSION_XML_EXPORT, VariableXMLAttributes);
+
 					protected:
 						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT static const char *strTypeXMLAttributes;
-					public:
 
+					public:
 						TPointer<XMLNode::Attributes> value;
 
 						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT VariableXMLAttributes();
@@ -63,13 +61,11 @@ namespace Quantum {
 
 						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT bool toBoolean();
 						QUANTUM_SCRIPT_EXTENSION_XML_EXPORT String toString();
-
 				};
 
 			};
 		};
 	};
 };
-
 
 #endif

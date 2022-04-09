@@ -11,23 +11,23 @@
 #define QUANTUM_SCRIPT_EXTENSION_XML_HPP
 
 #ifndef QUANTUM_SCRIPT_HPP
-#include "quantum-script.hpp"
+#	include "quantum-script.hpp"
 #endif
 
 #ifndef QUANTUM_SCRIPT_EXTENSION_XML__EXPORT_HPP
-#include "quantum-script-extension-xml--export.hpp"
+#	include "quantum-script-extension-xml--export.hpp"
 #endif
 
 #ifndef QUANTUM_SCRIPT_EXTENSION_XML_COPYRIGHT_HPP
-#include "quantum-script-extension-xml-copyright.hpp"
+#	include "quantum-script-extension-xml-copyright.hpp"
 #endif
 
 #ifndef QUANTUM_SCRIPT_EXTENSION_XML_LICENSE_HPP
-#include "quantum-script-extension-xml-license.hpp"
+#	include "quantum-script-extension-xml-license.hpp"
 #endif
 
 #ifndef QUANTUM_SCRIPT_EXTENSION_XML_VERSION_HPP
-#include "quantum-script-extension-xml-version.hpp"
+#	include "quantum-script-extension-xml-version.hpp"
 #endif
 
 namespace Quantum {
@@ -37,11 +37,10 @@ namespace Quantum {
 
 				using namespace Quantum::Script;
 
-				class XMLContext:
-					public Object {
+				class XMLContext : public Object {
 						XYO_DISALLOW_COPY_ASSIGN_MOVE(XMLContext);
-					public:
 
+					public:
 						Symbol symbolFunctionXMLAttribute;
 						TPointerX<Prototype> prototypeXMLAttribute;
 
@@ -68,4 +67,3 @@ namespace Quantum {
 };
 
 #endif
-

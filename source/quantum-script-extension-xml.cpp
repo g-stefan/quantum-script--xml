@@ -18,7 +18,7 @@
 #include "quantum-script-extension-xml-variablexmlnode.hpp"
 #include "quantum-script-extension-xml-variablexmldocument.hpp"
 #ifndef QUANTUM_SCRIPT_EXTENSION_XML_NO_VERSION
-#include "quantum-script-extension-xml-version.hpp"
+#	include "quantum-script-extension-xml-version.hpp"
 #endif
 
 #include "quantum-script-variableboolean.hpp"
@@ -34,7 +34,6 @@ namespace Quantum {
 
 				using namespace XYO;
 				using namespace Quantum::Script;
-
 
 				XMLContext::XMLContext() {
 					symbolFunctionXMLDocument = 0;
@@ -118,7 +117,6 @@ namespace Quantum {
 					defaultPrototypeFunction = (VariableFunction *)VariableFunction::newVariable(nullptr, nullptr, nullptr, functionXMLDocument, nullptr, nullptr);
 					(Context::getGlobalObject())->setPropertyBySymbol(xmlContext->symbolFunctionXMLDocument, defaultPrototypeFunction);
 					xmlContext->prototypeXMLDocument = defaultPrototypeFunction->prototype;
-
 				};
 
 				static TPointer<Variable> xml_load(VariableFunction *function, Variable *this_, VariableArray *arguments) {
@@ -131,7 +129,7 @@ namespace Quantum {
 
 					xml.newMemory();
 					xml->value = XYO::XMLReader::load(fileName, mode);
-					if(xml->value) {
+					if (xml->value) {
 						return xml.value();
 					};
 
@@ -143,11 +141,11 @@ namespace Quantum {
 					printf("- xml-document-save\n");
 
 #endif
-					if(!TIsType<VariableXMLDocument>(this_)) {
+					if (!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLDocument *)this_)->value) {
+					if (!((VariableXMLDocument *)this_)->value) {
 						((VariableXMLDocument *)this_)->value.newMemory();
 					};
 
@@ -162,28 +160,27 @@ namespace Quantum {
 					printf("- xml-attribute-get-name\n");
 
 #endif
-					if(!TIsType<VariableXMLAttribute>(this_)) {
+					if (!TIsType<VariableXMLAttribute>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!(((VariableXMLAttribute *)this_)->value)) {
+					if (!(((VariableXMLAttribute *)this_)->value)) {
 						((VariableXMLAttribute *)this_)->value.newMemory();
 					};
 
 					return VariableString::newVariable(((VariableXMLAttribute *)this_)->value->name);
 				};
 
-
 				static TPointer<Variable> xmlAttribute_setName(VariableFunction *function, Variable *this_, VariableArray *arguments) {
 #ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
 					printf("- xml-attribute-set-name\n");
 
 #endif
-					if(!TIsType<VariableXMLAttribute>(this_)) {
+					if (!TIsType<VariableXMLAttribute>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!(((VariableXMLAttribute *)this_)->value)) {
+					if (!(((VariableXMLAttribute *)this_)->value)) {
 						((VariableXMLAttribute *)this_)->value.newMemory();
 					};
 
@@ -192,17 +189,16 @@ namespace Quantum {
 					return Context::getValueUndefined();
 				};
 
-
 				static TPointer<Variable> xmlAttribute_getValue(VariableFunction *function, Variable *this_, VariableArray *arguments) {
 #ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
 					printf("- xml-attribute-get-value\n");
 
 #endif
-					if(!TIsType<VariableXMLAttribute>(this_)) {
+					if (!TIsType<VariableXMLAttribute>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!(((VariableXMLAttribute *)this_)->value)) {
+					if (!(((VariableXMLAttribute *)this_)->value)) {
 						((VariableXMLAttribute *)this_)->value.newMemory();
 					};
 
@@ -214,11 +210,11 @@ namespace Quantum {
 					printf("- xml-attribute-set-value\n");
 
 #endif
-					if(!TIsType<VariableXMLAttribute>(this_)) {
+					if (!TIsType<VariableXMLAttribute>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!(((VariableXMLAttribute *)this_)->value)) {
+					if (!(((VariableXMLAttribute *)this_)->value)) {
 						((VariableXMLAttribute *)this_)->value.newMemory();
 					};
 
@@ -232,21 +228,19 @@ namespace Quantum {
 					printf("- xml-attributes-get-index\n");
 
 #endif
-					if(!TIsType<VariableXMLAttributes>(this_)) {
+					if (!TIsType<VariableXMLAttributes>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!(((VariableXMLAttributes *)this_)->value)) {
+					if (!(((VariableXMLAttributes *)this_)->value)) {
 						((VariableXMLAttributes *)this_)->value.newMemory();
 					};
 
-
 					size_t index = (arguments->index(0))->toIndex();
-
 
 					VariableXMLAttribute *retV = static_cast<VariableXMLAttribute *>(VariableXMLAttribute::newVariable());
 					TPointer<XMLDocument::Attribute> &attribute_ = ((VariableXMLAttributes *)this_)->value->index(index);
-					if(!attribute_) {
+					if (!attribute_) {
 						attribute_.newMemory();
 					};
 					retV->value = attribute_;
@@ -258,21 +252,21 @@ namespace Quantum {
 					printf("- xml-attributes-setIndex\n");
 
 #endif
-					if(!TIsType<VariableXMLAttributes>(this_)) {
+					if (!TIsType<VariableXMLAttributes>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!(((VariableXMLAttributes *)this_)->value)) {
+					if (!(((VariableXMLAttributes *)this_)->value)) {
 						((VariableXMLAttributes *)this_)->value.newMemory();
 					};
 
 					size_t index = (arguments->index(0))->toIndex();
 
-					if(!TIsType<VariableXMLAttribute>(arguments->index(1))) {
+					if (!TIsType<VariableXMLAttribute>(arguments->index(1))) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLAttribute *)((arguments->index(1)).value()))->value) {
+					if (!((VariableXMLAttribute *)((arguments->index(1)).value()))->value) {
 						((VariableXMLAttribute *)((arguments->index(1)).value()))->value.newMemory();
 					};
 					(((VariableXMLAttributes *)this_)->value->index(index)) = ((VariableXMLAttribute *)((arguments->index(1)).value()))->value;
@@ -285,11 +279,11 @@ namespace Quantum {
 					printf("- xml-attributes-length\n");
 
 #endif
-					if(!TIsType<VariableXMLAttributes>(this_)) {
+					if (!TIsType<VariableXMLAttributes>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLAttributes *)this_)->value) {
+					if (!((VariableXMLAttributes *)this_)->value) {
 						((VariableXMLAttributes *)this_)->value.newMemory();
 					};
 
@@ -301,28 +295,27 @@ namespace Quantum {
 					printf("- xml-node-get-type\n");
 
 #endif
-					if(!TIsType<VariableXMLNode>(this_)) {
+					if (!TIsType<VariableXMLNode>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLNode *)this_)->value) {
+					if (!((VariableXMLNode *)this_)->value) {
 						((VariableXMLNode *)this_)->value.newMemory();
 					};
 
 					return VariableNumber::newVariable(((VariableXMLNode *)this_)->value->type);
 				};
 
-
 				static TPointer<Variable> xmlNode_setType(VariableFunction *function, Variable *this_, VariableArray *arguments) {
 #ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
 					printf("- xml-node-set-type\n");
 
 #endif
-					if(!TIsType<VariableXMLNode>(this_)) {
+					if (!TIsType<VariableXMLNode>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLNode *)this_)->value) {
+					if (!((VariableXMLNode *)this_)->value) {
 						((VariableXMLNode *)this_)->value.newMemory();
 					};
 
@@ -336,11 +329,11 @@ namespace Quantum {
 					printf("- xml-node-get-name\n");
 
 #endif
-					if(!TIsType<VariableXMLNode>(this_)) {
+					if (!TIsType<VariableXMLNode>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLNode *)this_)->value) {
+					if (!((VariableXMLNode *)this_)->value) {
 						((VariableXMLNode *)this_)->value.newMemory();
 					};
 
@@ -352,11 +345,11 @@ namespace Quantum {
 					printf("- xml-node-name\n");
 
 #endif
-					if(!TIsType<VariableXMLNode>(this_)) {
+					if (!TIsType<VariableXMLNode>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLNode *)this_)->value) {
+					if (!((VariableXMLNode *)this_)->value) {
 						((VariableXMLNode *)this_)->value.newMemory();
 					};
 
@@ -370,11 +363,11 @@ namespace Quantum {
 					printf("- xml-node-get-attributes\n");
 
 #endif
-					if(!TIsType<VariableXMLNode>(this_)) {
+					if (!TIsType<VariableXMLNode>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLNode *)this_)->value) {
+					if (!((VariableXMLNode *)this_)->value) {
 						((VariableXMLNode *)this_)->value.newMemory();
 					};
 
@@ -388,19 +381,19 @@ namespace Quantum {
 					printf("- xml-node-set-attributes\n");
 
 #endif
-					if(!TIsType<VariableXMLNode>(this_)) {
+					if (!TIsType<VariableXMLNode>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLNode *)this_)->value) {
+					if (!((VariableXMLNode *)this_)->value) {
 						((VariableXMLNode *)this_)->value.newMemory();
 					};
 
-					if(!TIsType<VariableXMLAttributes>(arguments->index(1))) {
+					if (!TIsType<VariableXMLAttributes>(arguments->index(1))) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!(static_cast<VariableXMLAttributes *>((arguments->index(1)).value()))->value) {
+					if (!(static_cast<VariableXMLAttributes *>((arguments->index(1)).value()))->value) {
 						(static_cast<VariableXMLAttributes *>((arguments->index(1)).value()))->value.newMemory();
 					};
 					((VariableXMLNode *)this_)->value->attributes = (static_cast<VariableXMLAttributes *>((arguments->index(1)).value()))->value;
@@ -414,17 +407,17 @@ namespace Quantum {
 
 #endif
 
-					if(!TIsType<VariableXMLNode>(this_)) {
+					if (!TIsType<VariableXMLNode>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLNode *)this_)->value) {
+					if (!((VariableXMLNode *)this_)->value) {
 						((VariableXMLNode *)this_)->value.newMemory();
 					};
 
 					VariableXMLDocument *document = static_cast<VariableXMLDocument *>(VariableXMLDocument::newVariable());
 					document->value.newMemory();
-					if(!((VariableXMLNode *)this_)->value->branch) {
+					if (!((VariableXMLNode *)this_)->value->branch) {
 						((VariableXMLNode *)this_)->value->branch.newMemory();
 					};
 					(*(document->value)) = ((VariableXMLNode *)this_)->value->branch.value();
@@ -432,26 +425,25 @@ namespace Quantum {
 					return document;
 				};
 
-
 				static TPointer<Variable> xmlNode_setBranch(VariableFunction *function, Variable *this_, VariableArray *arguments) {
 #ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
 					printf("- xml-node-set-branch\n");
 
 #endif
 
-					if(!TIsType<VariableXMLNode>(this_)) {
+					if (!TIsType<VariableXMLNode>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLNode *)this_)->value) {
+					if (!((VariableXMLNode *)this_)->value) {
 						((VariableXMLNode *)this_)->value.newMemory();
 					};
 
-					if(!TIsType<VariableXMLDocument>(arguments->index(1))) {
+					if (!TIsType<VariableXMLDocument>(arguments->index(1))) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!(static_cast<VariableXMLDocument *>((arguments->index(1)).value()))->value) {
+					if (!(static_cast<VariableXMLDocument *>((arguments->index(1)).value()))->value) {
 						(static_cast<VariableXMLDocument *>((arguments->index(1)).value()))->value.newMemory();
 					};
 					((VariableXMLNode *)this_)->value->branch = (static_cast<VariableXMLDocument *>((arguments->index(1)).value()))->value->root;
@@ -463,33 +455,32 @@ namespace Quantum {
 					printf("- xml-document-length\n");
 
 #endif
-					if(!TIsType<VariableXMLDocument>(this_)) {
+					if (!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLDocument *)this_)->value) {
+					if (!((VariableXMLDocument *)this_)->value) {
 						((VariableXMLDocument *)this_)->value.newMemory();
 					};
 
 					return VariableNumber::newVariable(((VariableXMLDocument *)this_)->value->length());
 				};
 
-
 				static TPointer<Variable> xmlDocument_getIndex(VariableFunction *function, Variable *this_, VariableArray *arguments) {
 #ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
 					printf("- xml-document-get-index\n");
 
 #endif
-					if(!TIsType<VariableXMLDocument>(this_)) {
+					if (!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLDocument *)this_)->value) {
+					if (!((VariableXMLDocument *)this_)->value) {
 						((VariableXMLDocument *)this_)->value.newMemory();
 					};
 
 					TPointer<XMLDocument::Node> node = ((VariableXMLDocument *)this_)->value->getIndex((arguments->index(0))->toIndex());
-					if(node) {
+					if (node) {
 						VariableXMLNode *retV = static_cast<VariableXMLNode *>(VariableXMLNode::newVariable());
 						retV->value = node;
 						return retV;
@@ -498,25 +489,24 @@ namespace Quantum {
 					return Context::getValueUndefined();
 				};
 
-
 				static TPointer<Variable> xmlDocument_setIndex(VariableFunction *function, Variable *this_, VariableArray *arguments) {
 #ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
 					printf("- xml-document-set-index\n");
 
 #endif
-					if(!TIsType<VariableXMLDocument>(this_)) {
+					if (!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLDocument *)this_)->value) {
+					if (!((VariableXMLDocument *)this_)->value) {
 						((VariableXMLDocument *)this_)->value.newMemory();
 					};
 
-					if(!TIsType<VariableXMLNode>(arguments->index(1))) {
+					if (!TIsType<VariableXMLNode>(arguments->index(1))) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLNode *)((arguments->index(1)).value()))->value) {
+					if (!((VariableXMLNode *)((arguments->index(1)).value()))->value) {
 						((VariableXMLNode *)((arguments->index(1)).value()))->value.newMemory();
 					};
 
@@ -529,16 +519,16 @@ namespace Quantum {
 					printf("- xml-document-add\n");
 
 #endif
-					if(!TIsType<VariableXMLDocument>(this_)) {
+					if (!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLDocument *)this_)->value) {
+					if (!((VariableXMLDocument *)this_)->value) {
 						((VariableXMLDocument *)this_)->value.newMemory();
 					};
 
-					if(TIsType<VariableXMLNode>(arguments->index(0))) {
-						if(!((VariableXMLNode *)((arguments->index(0)).value()))->value) {
+					if (TIsType<VariableXMLNode>(arguments->index(0))) {
+						if (!((VariableXMLNode *)((arguments->index(0)).value()))->value) {
 							((VariableXMLNode *)((arguments->index(0)).value()))->value.newMemory();
 						};
 
@@ -550,103 +540,96 @@ namespace Quantum {
 					return Context::getValueUndefined();
 				};
 
-
 				static TPointer<Variable> xmlDocument_get(VariableFunction *function, Variable *this_, VariableArray *arguments) {
 #ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
 					printf("- xml-document-get\n");
 
 #endif
-					if(!TIsType<VariableXMLDocument>(this_)) {
+					if (!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLDocument *)this_)->value) {
+					if (!((VariableXMLDocument *)this_)->value) {
 						((VariableXMLDocument *)this_)->value.newMemory();
 					};
-
 
 					TPointer<VariableXMLDocument> document = static_cast<VariableXMLDocument *>(VariableXMLDocument::newVariable());
 					document->value.newMemory();
 
 					(*document->value) = ((VariableXMLDocument *)this_)->value->get((arguments->index(0))->toString());
-					if(document->value) {
+					if (document->value) {
 						return document.value();
 					};
 
 					return Context::getValueUndefined();
 				};
-
 
 				static TPointer<Variable> xmlDocument_find(VariableFunction *function, Variable *this_, VariableArray *arguments) {
 #ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
 					printf("- xml-document-find\n");
 
 #endif
-					if(!TIsType<VariableXMLDocument>(this_)) {
+					if (!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLDocument *)this_)->value) {
+					if (!((VariableXMLDocument *)this_)->value) {
 						((VariableXMLDocument *)this_)->value.newMemory();
 					};
-
 
 					TPointer<VariableXMLDocument> document = static_cast<VariableXMLDocument *>(VariableXMLDocument::newVariable());
 					document->value.newMemory();
 
 					(*document->value) = ((VariableXMLDocument *)this_)->value->find((arguments->index(0))->toString());
-					if(document->value) {
+					if (document->value) {
 						return document.value();
 					};
 
 					return Context::getValueUndefined();
 				};
-
 
 				static TPointer<Variable> xmlDocument_findWithAttributeValue(VariableFunction *function, Variable *this_, VariableArray *arguments) {
 #ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
 					printf("- xml-document-find-with-attribute-value\n");
 
 #endif
-					if(!TIsType<VariableXMLDocument>(this_)) {
+					if (!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLDocument *)this_)->value) {
+					if (!((VariableXMLDocument *)this_)->value) {
 						((VariableXMLDocument *)this_)->value.newMemory();
 					};
-
 
 					TPointer<VariableXMLDocument> document = static_cast<VariableXMLDocument *>(VariableXMLDocument::newVariable());
 					document->value.newMemory();
 
 					(*document->value) = ((VariableXMLDocument *)this_)->value->findWithAttributeValue((arguments->index(0))->toString(), (arguments->index(1))->toString(), (arguments->index(2))->toString());
-					if(document->value) {
+					if (document->value) {
 						return document.value();
 					};
 
 					return Context::getValueUndefined();
 				};
 
-
 				static TPointer<Variable> xmlDocument_addDocument(VariableFunction *function, Variable *this_, VariableArray *arguments) {
 #ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
 					printf("- xml-document-add-document\n");
 
 #endif
-					if(!TIsType<VariableXMLDocument>(this_)) {
+					if (!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!TIsType<VariableXMLDocument>(arguments->index(0))) {
+					if (!TIsType<VariableXMLDocument>(arguments->index(0))) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLDocument *)this_)->value) {
+					if (!((VariableXMLDocument *)this_)->value) {
 						((VariableXMLDocument *)this_)->value.newMemory();
 					};
 
-					if(!((VariableXMLDocument *)((arguments->index(0)).value()))->value) {
+					if (!((VariableXMLDocument *)((arguments->index(0)).value()))->value) {
 						((VariableXMLDocument *)((arguments->index(0)).value()))->value.newMemory();
 					};
 
@@ -655,21 +638,20 @@ namespace Quantum {
 					return Context::getValueUndefined();
 				};
 
-
 				static TPointer<Variable> xmlDocument_removeIndex(VariableFunction *function, Variable *this_, VariableArray *arguments) {
 #ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
 					printf("- xml-document-add-list\n");
 
 #endif
-					if(!TIsType<VariableXMLDocument>(this_)) {
+					if (!TIsType<VariableXMLDocument>(this_)) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!TIsType<VariableXMLDocument>(arguments->index(0))) {
+					if (!TIsType<VariableXMLDocument>(arguments->index(0))) {
 						throw(Error("invalid parameter"));
 					};
 
-					if(!((VariableXMLDocument *)this_)->value) {
+					if (!((VariableXMLDocument *)this_)->value) {
 						((VariableXMLDocument *)this_)->value.newMemory();
 					};
 
@@ -677,7 +659,6 @@ namespace Quantum {
 
 					return Context::getValueUndefined();
 				};
-
 
 				void registerInternalExtension(Executive *executive) {
 					executive->registerInternalExtension("XML", initExecutive);
@@ -761,7 +742,6 @@ namespace Quantum {
 					executive->setFunction2("XMLDocument.prototype.findWithAttributeValue(name,attribute,value)", xmlDocument_findWithAttributeValue);
 					executive->setFunction2("XMLDocument.prototype.addDocument(document)", xmlDocument_addDocument);
 					executive->setFunction2("XMLDocument.prototype.removeIndex(index)", xmlDocument_removeIndex);
-
 				};
 
 			};
@@ -774,4 +754,3 @@ extern "C" QUANTUM_SCRIPT_EXTENSION_XML_EXPORT void quantumScriptExtension(Quant
 	Quantum::Script::Extension::XML::initExecutive(executive, extensionId);
 };
 #endif
-

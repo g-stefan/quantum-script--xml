@@ -21,7 +21,6 @@
 #include "quantum-script-variablenumber.hpp"
 #include "quantum-script-variablestring.hpp"
 
-
 namespace Quantum {
 	namespace Script {
 		namespace Extension {
@@ -42,7 +41,7 @@ namespace Quantum {
 				};
 
 				Variable *VariableXMLAttributes::newVariable() {
-					return (Variable *) TMemory<VariableXMLAttributes>::newMemory();
+					return (Variable *)TMemory<VariableXMLAttributes>::newMemory();
 				};
 
 				Variable *VariableXMLAttributes::instancePrototype() {
@@ -61,5 +60,3 @@ namespace Quantum {
 		};
 	};
 };
-
-
