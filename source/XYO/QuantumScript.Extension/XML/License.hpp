@@ -13,8 +13,7 @@
 
 namespace XYO::QuantumScript::Extension::XML::License {
 
-	XYO_QUANTUMSCRIPT_EXTENSION_XML_EXPORT const char *licenseHeader();
-	XYO_QUANTUMSCRIPT_EXTENSION_XML_EXPORT const char *licenseBody();
+	XYO_QUANTUMSCRIPT_EXTENSION_XML_EXPORT const char *license();
 	XYO_QUANTUMSCRIPT_EXTENSION_XML_EXPORT const char *shortLicense();
 
 };
