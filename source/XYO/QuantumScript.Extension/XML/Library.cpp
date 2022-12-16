@@ -102,7 +102,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xml_load(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-load\n");
 #endif
 		String fileName = (arguments->index(0))->toString();
@@ -118,7 +118,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlDocument_save(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-document-save\n");
 
 #endif
@@ -137,7 +137,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlAttribute_getName(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-attribute-get-name\n");
 
 #endif
@@ -153,7 +153,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlAttribute_setName(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-attribute-set-name\n");
 
 #endif
@@ -171,7 +171,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlAttribute_getValue(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-attribute-get-value\n");
 
 #endif
@@ -187,7 +187,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlAttribute_setValue(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-attribute-set-value\n");
 
 #endif
@@ -205,7 +205,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlAttributes_getIndex(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-attributes-get-index\n");
 
 #endif
@@ -229,7 +229,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlAttributes_setIndex(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-attributes-setIndex\n");
 
 #endif
@@ -256,7 +256,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlAttributes_length(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-attributes-length\n");
 
 #endif
@@ -272,7 +272,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlNode_getType(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-node-get-type\n");
 
 #endif
@@ -288,7 +288,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlNode_setType(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-node-set-type\n");
 
 #endif
@@ -306,7 +306,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlNode_getName(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-node-get-name\n");
 
 #endif
@@ -322,7 +322,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlNode_setName(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-node-name\n");
 
 #endif
@@ -340,7 +340,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlNode_getAttributes(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-node-get-attributes\n");
 
 #endif
@@ -358,7 +358,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlNode_setAttributes(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-node-set-attributes\n");
 
 #endif
@@ -383,7 +383,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlNode_getBranch(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-node-get-branch\n");
 
 #endif
@@ -407,7 +407,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlNode_setBranch(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-node-set-branch\n");
 
 #endif
@@ -432,7 +432,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlDocument_length(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-document-length\n");
 
 #endif
@@ -448,7 +448,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlDocument_getIndex(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-document-get-index\n");
 
 #endif
@@ -471,7 +471,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlDocument_setIndex(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-document-set-index\n");
 
 #endif
@@ -496,7 +496,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlDocument_add(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-document-add\n");
 
 #endif
@@ -522,7 +522,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlDocument_get(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-document-get\n");
 
 #endif
@@ -546,7 +546,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlDocument_find(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-document-find\n");
 
 #endif
@@ -570,7 +570,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlDocument_findWithAttributeValue(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-document-find-with-attribute-value\n");
 
 #endif
@@ -594,7 +594,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlDocument_addDocument(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-document-add-document\n");
 
 #endif
@@ -620,7 +620,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	};
 
 	static TPointer<Variable> xmlDocument_removeIndex(VariableFunction *function, Variable *this_, VariableArray *arguments) {
-#ifdef QUANTUM_SCRIPT_DEBUG_RUNTIME
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
 		printf("- xml-document-add-list\n");
 
 #endif
