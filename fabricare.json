@@ -12,6 +12,8 @@
 			"quantum-script",
 			"quantum-script--console",
 			"file-xml"
-		]
+		],
+		"hasRelease" : true,
+		"githubRelease" : true
 	}
 }
