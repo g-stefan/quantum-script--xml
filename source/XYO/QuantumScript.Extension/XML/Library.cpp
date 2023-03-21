@@ -648,7 +648,7 @@ namespace XYO::QuantumScript::Extension::XML {
 	void initExecutive(Executive *executive, void *extensionId) {
 
 		String info = "XML\r\n";
-		info << License::shortLicense();
+		info << License::shortLicense().c_str();
 
 		executive->setExtensionName(extensionId, "XML");
 		executive->setExtensionInfo(extensionId, info);
