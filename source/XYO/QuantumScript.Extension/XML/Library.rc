@@ -8,4 +8,4 @@
 #include <XYO/QuantumScript.Extension/XML/Copyright.rh>
 #include <XYO/QuantumScript.Extension/XML/Version.rh>
 
-XYO_APPLICATION_VERSION_INFO(XYO_QUANTUMSCRIPT_EXTENSION_XML,"quantum-script--xml.dll","Quantum Script Extension XML")
+XYO_PLATFORM_VERSION_INFO(XYO_QUANTUMSCRIPT_EXTENSION_XML,"quantum-script--xml.dll","Quantum Script Extension XML")

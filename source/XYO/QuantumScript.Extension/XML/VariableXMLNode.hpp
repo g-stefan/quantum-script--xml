@@ -28,7 +28,7 @@ namespace XYO::ManagedMemory {
 namespace XYO::QuantumScript::Extension::XML {
 
 	class VariableXMLNode : public Variable {
-			XYO_DISALLOW_COPY_ASSIGN_MOVE(VariableXMLNode);
+			XYO_PLATFORM_DISALLOW_COPY_ASSIGN_MOVE(VariableXMLNode);
 			XYO_DYNAMIC_TYPE_DEFINE(XYO_QUANTUMSCRIPT_EXTENSION_XML_EXPORT, VariableXMLNode);
 
 		protected:

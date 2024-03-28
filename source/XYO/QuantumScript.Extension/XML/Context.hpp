@@ -14,7 +14,7 @@
 namespace XYO::QuantumScript::Extension::XML {
 
 	class XMLContext : public Object {
-			XYO_DISALLOW_COPY_ASSIGN_MOVE(XMLContext);
+			XYO_PLATFORM_DISALLOW_COPY_ASSIGN_MOVE(XMLContext);
 
 		public:
 			Symbol symbolFunctionXMLAttribute;
