@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE catalog>
+<!-- catalog of books -->
+<c:catalog xmlns:c="urn:catalog" version="2">
+	<book id="b1" lang='en'>
+		<title>XML &amp; You</title>
+		<price currency="EUR">10.50</price>
+		<note><![CDATA[a < b && c > d]]></note>
+	</book>
+	<book id="b2">
+		<title>Second</title>
+		<price currency="USD">7</price>
+		<empty></empty>
+		<closed/>
+	</book>
+	<p>Hello <b>big</b> world</p>
+</c:catalog>

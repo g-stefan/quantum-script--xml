@@ -39,6 +39,8 @@ namespace XYO::QuantumScript::Extension::XML {
 
 			XYO_QUANTUMSCRIPT_EXTENSION_XML_EXPORT VariableXMLDocument();
 
+			XYO_QUANTUMSCRIPT_EXTENSION_XML_EXPORT void activeDestructor();
+
 			XYO_QUANTUMSCRIPT_EXTENSION_XML_EXPORT static Variable *newVariable();
 
 			XYO_QUANTUMSCRIPT_EXTENSION_XML_EXPORT String getVariableType();

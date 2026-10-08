@@ -36,6 +36,10 @@ namespace XYO::QuantumScript::Extension::XML {
 		return (Extension::XML::getContext())->prototypeXMLNode->prototype;
 	};
 
+	void VariableXMLNode::activeDestructor() {
+		value.deleteMemory();
+	};
+
 	bool VariableXMLNode::toBoolean() {
 		return true;
 	};

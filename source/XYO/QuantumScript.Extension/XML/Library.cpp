@@ -4,6 +4,8 @@
 // SPDX-FileCopyrightText: 2016-2026 Grigore Stefan <g_stefan@yahoo.com>
 // SPDX-License-Identifier: MIT
 
+#include <math.h>
+
 #include <XYO/QuantumScript.Extension/XML/Library.hpp>
 #include <XYO/QuantumScript.Extension/XML/Copyright.hpp>
 #include <XYO/QuantumScript.Extension/XML/License.hpp>
@@ -18,12 +20,76 @@
 namespace XYO::QuantumScript::Extension::XML {
 
 	XMLContext::XMLContext() {
+		symbolFunctionXMLAttribute = 0;
+		prototypeXMLAttribute.pointerLink(this);
+		symbolFunctionXMLAttributes = 0;
+		prototypeXMLAttributes.pointerLink(this);
+		symbolFunctionXMLNode = 0;
+		prototypeXMLNode.pointerLink(this);
 		symbolFunctionXMLDocument = 0;
 		prototypeXMLDocument.pointerLink(this);
 	};
 
 	XMLContext *getContext() {
 		return TSingleton<XMLContext>::getValue();
+	};
+
+	// index argument, false for undefined, NaN, infinite or negative values
+	static bool getIndexArgument(Variable *value, size_t &index) {
+		Number number = value->toNumber();
+		if (isnan(number) || isinf(number) || (number < 0)) {
+			return false;
+		};
+		index = static_cast<size_t>(number);
+		return true;
+	};
+
+	// parser mode argument, Normal for missing or unknown values
+	static FileXML::Mode getModeArgument(Variable *value) {
+		Number number = value->toNumber();
+		if (isnan(number) || (number < 0) || (number > static_cast<Number>(FileXML::Mode::IndentationTab))) {
+			return FileXML::Mode::Normal;
+		};
+		return static_cast<FileXML::Mode>(static_cast<int>(number));
+	};
+
+	// true if branch is the child list of node or of one of its descendants
+	static bool nodeOwnsBranch(FileXML::Node *node, FileXML::Node::Branch *branch) {
+		if (!node) {
+			return false;
+		};
+		FileXML::Node::Branch *nodeBranch = node->branch;
+		if (!nodeBranch) {
+			return false;
+		};
+		if (nodeBranch == branch) {
+			return true;
+		};
+		for (FileXML::Node::Branch::Node *scan = nodeBranch->head; scan != nullptr; scan = scan->next) {
+			if (nodeOwnsBranch(scan->value, branch)) {
+				return true;
+			};
+		};
+		return false;
+	};
+
+	// true if node is in branch or below it
+	static bool branchContainsNode(FileXML::Node::Branch *branch, FileXML::Node *node) {
+		if (!branch) {
+			return false;
+		};
+		for (FileXML::Node::Branch::Node *scan = branch->head; scan != nullptr; scan = scan->next) {
+			if (!scan->value) {
+				continue;
+			};
+			if (scan->value == node) {
+				return true;
+			};
+			if (branchContainsNode(scan->value->branch, node)) {
+				return true;
+			};
+		};
+		return false;
 	};
 
 	static TPointer<Variable> functionXMLAttribute(VariableFunction *function, Variable *this_, VariableArray *arguments) {
@@ -106,11 +172,32 @@ namespace XYO::QuantumScript::Extension::XML {
 		printf("- xml-load\n");
 #endif
 		String fileName = (arguments->index(0))->toString();
-		size_t mode = (arguments->index(1))->toIndex();
+		FileXML::Mode mode = getModeArgument(arguments->index(1));
 		TPointer<VariableXMLDocument> xml;
 
 		xml.newMemory();
-		if (XYO::FileXML::load(fileName, xml->value, static_cast<FileXML::Mode>(mode))) {
+		if (XYO::FileXML::load(fileName, xml->value, mode)) {
+			return xml.value();
+		};
+
+		return Context::getValueUndefined();
+	};
+
+	static TPointer<Variable> xml_loadFromString(VariableFunction *function, Variable *this_, VariableArray *arguments) {
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
+		printf("- xml-load-from-string\n");
+#endif
+		// undefined / null are not text, do not parse "undefined"
+		if (TIsTypeExact<VariableUndefined>(arguments->index(0)) || TIsType<VariableNull>(arguments->index(0))) {
+			return Context::getValueUndefined();
+		};
+
+		String text = (arguments->index(0))->toString();
+		FileXML::Mode mode = getModeArgument(arguments->index(1));
+		TPointer<VariableXMLDocument> xml;
+
+		xml.newMemory();
+		if (XYO::FileXML::loadFromString(text, xml->value, mode)) {
 			return xml.value();
 		};
 
@@ -131,9 +218,28 @@ namespace XYO::QuantumScript::Extension::XML {
 		};
 
 		String fileName = (arguments->index(0))->toString();
-		size_t mode = (arguments->index(1))->toIndex();
+		FileXML::Mode mode = getModeArgument(arguments->index(1));
 
-		return VariableBoolean::newVariable(XYO::FileXML::save(fileName, ((VariableXMLDocument *)this_)->value, static_cast<FileXML::Mode>(mode)));
+		return VariableBoolean::newVariable(XYO::FileXML::save(fileName, ((VariableXMLDocument *)this_)->value, mode));
+	};
+
+	static TPointer<Variable> xmlDocument_saveToString(VariableFunction *function, Variable *this_, VariableArray *arguments) {
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
+		printf("- xml-document-save-to-string\n");
+#endif
+		if (!TIsType<VariableXMLDocument>(this_)) {
+			throw(Error("invalid parameter"));
+		};
+
+		if (!((VariableXMLDocument *)this_)->value) {
+			((VariableXMLDocument *)this_)->value.newMemory();
+		};
+
+		FileXML::Mode mode = getModeArgument(arguments->index(0));
+		String output;
+		XYO::FileXML::saveToString(output, ((VariableXMLDocument *)this_)->value, mode);
+
+		return VariableString::newVariable(output);
 	};
 
 	static TPointer<Variable> xmlAttribute_getName(VariableFunction *function, Variable *this_, VariableArray *arguments) {
@@ -217,20 +323,27 @@ namespace XYO::QuantumScript::Extension::XML {
 			((VariableXMLAttributes *)this_)->value.newMemory();
 		};
 
-		size_t index = (arguments->index(0))->toIndex();
+		// past the end: undefined, the list does not grow
+		size_t index;
+		if (!getIndexArgument(arguments->index(0), index)) {
+			return Context::getValueUndefined();
+		};
+		if (index >= ((VariableXMLAttributes *)this_)->value->length()) {
+			return Context::getValueUndefined();
+		};
 
-		VariableXMLAttribute *retV = static_cast<VariableXMLAttribute *>(VariableXMLAttribute::newVariable());
 		TPointer<FileXML::Attribute> &attribute_ = ((VariableXMLAttributes *)this_)->value->index(index);
 		if (!attribute_) {
-			attribute_.newMemory();
+			return Context::getValueUndefined();
 		};
+		VariableXMLAttribute *retV = static_cast<VariableXMLAttribute *>(VariableXMLAttribute::newVariable());
 		retV->value = attribute_;
 		return retV;
 	};
 
 	static TPointer<Variable> xmlAttributes_setIndex(VariableFunction *function, Variable *this_, VariableArray *arguments) {
 #ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
-		printf("- xml-attributes-setIndex\n");
+		printf("- xml-attributes-set-index\n");
 
 #endif
 		if (!TIsType<VariableXMLAttributes>(this_)) {
@@ -241,10 +354,17 @@ namespace XYO::QuantumScript::Extension::XML {
 			((VariableXMLAttributes *)this_)->value.newMemory();
 		};
 
-		size_t index = (arguments->index(0))->toIndex();
-
 		if (!TIsType<VariableXMLAttribute>(arguments->index(1))) {
 			throw(Error("invalid parameter"));
+		};
+
+		// index == length() appends, past that nothing happens (no gaps)
+		size_t index;
+		if (!getIndexArgument(arguments->index(0), index)) {
+			return Context::getValueUndefined();
+		};
+		if (index > ((VariableXMLAttributes *)this_)->value->length()) {
+			return Context::getValueUndefined();
 		};
 
 		if (!((VariableXMLAttribute *)((arguments->index(1)).value()))->value) {
@@ -269,6 +389,106 @@ namespace XYO::QuantumScript::Extension::XML {
 		};
 
 		return VariableNumber::newVariable(((VariableXMLAttributes *)this_)->value->length());
+	};
+
+	// index of the first attribute named name, or -1
+	static Number attributesIndexOf(FileXML::Node::Attributes *attributes, const String &name) {
+		size_t length = attributes->length();
+		for (size_t index = 0; index < length; ++index) {
+			TPointer<FileXML::Attribute> &attribute_ = attributes->index(index);
+			if (attribute_) {
+				if (attribute_->name == name) {
+					return static_cast<Number>(index);
+				};
+			};
+		};
+		return -1;
+	};
+
+	static TPointer<Variable> xmlAttributes_removeIndex(VariableFunction *function, Variable *this_, VariableArray *arguments) {
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
+		printf("- xml-attributes-remove-index\n");
+#endif
+		if (!TIsType<VariableXMLAttributes>(this_)) {
+			throw(Error("invalid parameter"));
+		};
+
+		if (!((VariableXMLAttributes *)this_)->value) {
+			((VariableXMLAttributes *)this_)->value.newMemory();
+		};
+
+		size_t index;
+		if (getIndexArgument(arguments->index(0), index)) {
+			((VariableXMLAttributes *)this_)->value->remove(index);
+		};
+
+		return Context::getValueUndefined();
+	};
+
+	static TPointer<Variable> xmlAttributes_indexOf(VariableFunction *function, Variable *this_, VariableArray *arguments) {
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
+		printf("- xml-attributes-index-of\n");
+#endif
+		if (!TIsType<VariableXMLAttributes>(this_)) {
+			throw(Error("invalid parameter"));
+		};
+
+		if (!((VariableXMLAttributes *)this_)->value) {
+			((VariableXMLAttributes *)this_)->value.newMemory();
+		};
+
+		return VariableNumber::newVariable(attributesIndexOf(((VariableXMLAttributes *)this_)->value, (arguments->index(0))->toString()));
+	};
+
+	static TPointer<Variable> xmlAttributes_find(VariableFunction *function, Variable *this_, VariableArray *arguments) {
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
+		printf("- xml-attributes-find\n");
+#endif
+		if (!TIsType<VariableXMLAttributes>(this_)) {
+			throw(Error("invalid parameter"));
+		};
+
+		if (!((VariableXMLAttributes *)this_)->value) {
+			((VariableXMLAttributes *)this_)->value.newMemory();
+		};
+
+		Number index = attributesIndexOf(((VariableXMLAttributes *)this_)->value, (arguments->index(0))->toString());
+		if (index < 0) {
+			return Context::getValueUndefined();
+		};
+
+		VariableXMLAttribute *retV = static_cast<VariableXMLAttribute *>(VariableXMLAttribute::newVariable());
+		retV->value = ((VariableXMLAttributes *)this_)->value->index(static_cast<size_t>(index));
+		return retV;
+	};
+
+	static TPointer<Variable> xmlAttributes_remove(VariableFunction *function, Variable *this_, VariableArray *arguments) {
+#ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
+		printf("- xml-attributes-remove\n");
+#endif
+		if (!TIsType<VariableXMLAttributes>(this_)) {
+			throw(Error("invalid parameter"));
+		};
+
+		if (!((VariableXMLAttributes *)this_)->value) {
+			((VariableXMLAttributes *)this_)->value.newMemory();
+		};
+
+		// every attribute named name, from the end so indexes stay valid
+		FileXML::Node::Attributes *attributes = ((VariableXMLAttributes *)this_)->value;
+		String name = (arguments->index(0))->toString();
+		size_t count = 0;
+		for (size_t index = attributes->length(); index > 0; --index) {
+			TPointer<FileXML::Attribute> &attribute_ = attributes->index(index - 1);
+			if (attribute_) {
+				if (attribute_->name == name) {
+					attributes->remove(index - 1);
+					++count;
+				};
+			};
+		};
+
+		return VariableNumber::newVariable(static_cast<Number>(count));
 	};
 
 	static TPointer<Variable> xmlNode_getType(VariableFunction *function, Variable *this_, VariableArray *arguments) {
@@ -300,7 +520,12 @@ namespace XYO::QuantumScript::Extension::XML {
 			((VariableXMLNode *)this_)->value.newMemory();
 		};
 
-		((VariableXMLNode *)this_)->value->type = static_cast<FileXML::NodeType>((arguments->index(0))->toIndex());
+		Number type = (arguments->index(0))->toNumber();
+		if (isnan(type) || (type < 0) || (type > static_cast<Number>(FileXML::NodeType::DocumentTypeDefinition))) {
+			throw(Error("invalid parameter"));
+		};
+
+		((VariableXMLNode *)this_)->value->type = static_cast<FileXML::NodeType>(static_cast<int>(type));
 
 		return Context::getValueUndefined();
 	};
@@ -323,7 +548,7 @@ namespace XYO::QuantumScript::Extension::XML {
 
 	static TPointer<Variable> xmlNode_setName(VariableFunction *function, Variable *this_, VariableArray *arguments) {
 #ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
-		printf("- xml-node-name\n");
+		printf("- xml-node-set-name\n");
 
 #endif
 		if (!TIsType<VariableXMLNode>(this_)) {
@@ -352,6 +577,10 @@ namespace XYO::QuantumScript::Extension::XML {
 			((VariableXMLNode *)this_)->value.newMemory();
 		};
 
+		if (!((VariableXMLNode *)this_)->value->attributes) {
+			((VariableXMLNode *)this_)->value->attributes.newMemory();
+		};
+
 		VariableXMLAttributes *attributes = static_cast<VariableXMLAttributes *>(VariableXMLAttributes::newVariable());
 		attributes->value = ((VariableXMLNode *)this_)->value->attributes;
 		return attributes;
@@ -370,14 +599,14 @@ namespace XYO::QuantumScript::Extension::XML {
 			((VariableXMLNode *)this_)->value.newMemory();
 		};
 
-		if (!TIsType<VariableXMLAttributes>(arguments->index(1))) {
+		if (!TIsType<VariableXMLAttributes>(arguments->index(0))) {
 			throw(Error("invalid parameter"));
 		};
 
-		if (!(static_cast<VariableXMLAttributes *>((arguments->index(1)).value()))->value) {
-			(static_cast<VariableXMLAttributes *>((arguments->index(1)).value()))->value.newMemory();
+		if (!(static_cast<VariableXMLAttributes *>((arguments->index(0)).value()))->value) {
+			(static_cast<VariableXMLAttributes *>((arguments->index(0)).value()))->value.newMemory();
 		};
-		((VariableXMLNode *)this_)->value->attributes = (static_cast<VariableXMLAttributes *>((arguments->index(1)).value()))->value;
+		((VariableXMLNode *)this_)->value->attributes = (static_cast<VariableXMLAttributes *>((arguments->index(0)).value()))->value;
 
 		return Context::getValueUndefined();
 	};
@@ -420,14 +649,22 @@ namespace XYO::QuantumScript::Extension::XML {
 			((VariableXMLNode *)this_)->value.newMemory();
 		};
 
-		if (!TIsType<VariableXMLDocument>(arguments->index(1))) {
+		if (!TIsType<VariableXMLDocument>(arguments->index(0))) {
 			throw(Error("invalid parameter"));
 		};
 
-		if (!(static_cast<VariableXMLDocument *>((arguments->index(1)).value()))->value) {
-			(static_cast<VariableXMLDocument *>((arguments->index(1)).value()))->value.newMemory();
+		VariableXMLDocument *document = static_cast<VariableXMLDocument *>((arguments->index(0)).value());
+		if (!document->value) {
+			document->value.newMemory();
 		};
-		((VariableXMLNode *)this_)->value->branch = (static_cast<VariableXMLDocument *>((arguments->index(1)).value()))->value->root;
+		// an empty document gets its list now, so the node and the document share it
+		if (!document->value->root) {
+			document->value->root.newMemory();
+		};
+		if (branchContainsNode(document->value->root, ((VariableXMLNode *)this_)->value)) {
+			throw(Error("node cannot contain itself"));
+		};
+		((VariableXMLNode *)this_)->value->branch = document->value->root;
 		return Context::getValueUndefined();
 	};
 
@@ -460,7 +697,12 @@ namespace XYO::QuantumScript::Extension::XML {
 			((VariableXMLDocument *)this_)->value.newMemory();
 		};
 
-		TPointer<FileXML::Node> node = ((VariableXMLDocument *)this_)->value->getIndex((arguments->index(0))->toIndex());
+		size_t index;
+		if (!getIndexArgument(arguments->index(0), index)) {
+			return Context::getValueUndefined();
+		};
+
+		TPointer<FileXML::Node> node = ((VariableXMLDocument *)this_)->value->getIndex(index);
 		if (node) {
 			VariableXMLNode *retV = static_cast<VariableXMLNode *>(VariableXMLNode::newVariable());
 			retV->value = node;
@@ -487,11 +729,21 @@ namespace XYO::QuantumScript::Extension::XML {
 			throw(Error("invalid parameter"));
 		};
 
-		if (!((VariableXMLNode *)((arguments->index(1)).value()))->value) {
-			((VariableXMLNode *)((arguments->index(1)).value()))->value.newMemory();
+		VariableXMLNode *node = (VariableXMLNode *)((arguments->index(1)).value());
+		if (!node->value) {
+			node->value.newMemory();
 		};
 
-		((VariableXMLDocument *)this_)->value->setIndex((arguments->index(0))->toIndex(), ((VariableXMLNode *)((arguments->index(1)).value()))->value);
+		size_t index;
+		if (!getIndexArgument(arguments->index(0), index)) {
+			return Context::getValueUndefined();
+		};
+
+		if (nodeOwnsBranch(node->value, ((VariableXMLDocument *)this_)->value->root)) {
+			throw(Error("node cannot contain itself"));
+		};
+
+		((VariableXMLDocument *)this_)->value->setIndex(index, node->value);
 		return Context::getValueUndefined();
 	};
 
@@ -509,11 +761,16 @@ namespace XYO::QuantumScript::Extension::XML {
 		};
 
 		if (TIsType<VariableXMLNode>(arguments->index(0))) {
-			if (!((VariableXMLNode *)((arguments->index(0)).value()))->value) {
-				((VariableXMLNode *)((arguments->index(0)).value()))->value.newMemory();
+			VariableXMLNode *node = (VariableXMLNode *)((arguments->index(0)).value());
+			if (!node->value) {
+				node->value.newMemory();
 			};
 
-			((VariableXMLDocument *)this_)->value->add(((VariableXMLNode *)((arguments->index(0)).value()))->value);
+			if (nodeOwnsBranch(node->value, ((VariableXMLDocument *)this_)->value->root)) {
+				throw(Error("node cannot contain itself"));
+			};
+
+			((VariableXMLDocument *)this_)->value->add(node->value);
 
 			return arguments->index(0);
 		};
@@ -610,25 +867,31 @@ namespace XYO::QuantumScript::Extension::XML {
 			((VariableXMLDocument *)this_)->value.newMemory();
 		};
 
-		if (!((VariableXMLDocument *)((arguments->index(0)).value()))->value) {
-			((VariableXMLDocument *)((arguments->index(0)).value()))->value.newMemory();
+		VariableXMLDocument *document = (VariableXMLDocument *)((arguments->index(0)).value());
+		if (!document->value) {
+			document->value.newMemory();
 		};
 
-		((VariableXMLDocument *)this_)->value->addDocument(*(((VariableXMLDocument *)((arguments->index(0)).value()))->value));
+		FileXML::Node::Branch *root = ((VariableXMLDocument *)this_)->value->root;
+		if (root && document->value->root) {
+			for (FileXML::Node::Branch::Node *scan = document->value->root->head; scan != nullptr; scan = scan->next) {
+				if (nodeOwnsBranch(scan->value, root)) {
+					throw(Error("node cannot contain itself"));
+				};
+			};
+		};
+
+		((VariableXMLDocument *)this_)->value->addDocument(*(document->value));
 
 		return Context::getValueUndefined();
 	};
 
 	static TPointer<Variable> xmlDocument_removeIndex(VariableFunction *function, Variable *this_, VariableArray *arguments) {
 #ifdef XYO_QUANTUMSCRIPT_DEBUG_RUNTIME
-		printf("- xml-document-add-list\n");
+		printf("- xml-document-remove-index\n");
 
 #endif
 		if (!TIsType<VariableXMLDocument>(this_)) {
-			throw(Error("invalid parameter"));
-		};
-
-		if (!TIsType<VariableXMLDocument>(arguments->index(0))) {
 			throw(Error("invalid parameter"));
 		};
 
@@ -636,7 +899,10 @@ namespace XYO::QuantumScript::Extension::XML {
 			((VariableXMLDocument *)this_)->value.newMemory();
 		};
 
-		((VariableXMLDocument *)this_)->value->removeIndex((arguments->index(0))->toIndex());
+		size_t index;
+		if (getIndexArgument(arguments->index(0), index)) {
+			((VariableXMLDocument *)this_)->value->removeIndex(index);
+		};
 
 		return Context::getValueUndefined();
 	};
@@ -692,15 +958,20 @@ namespace XYO::QuantumScript::Extension::XML {
 		//
 		executive->compileStringX("var XML={};");
 		executive->setFunction2("XML.load(fileName,parserMode)", xml_load);
+		executive->setFunction2("XML.loadFromString(text,parserMode)", xml_loadFromString);
 		//
 		executive->setFunction2("XMLAttribute.prototype.getName()", xmlAttribute_getName);
 		executive->setFunction2("XMLAttribute.prototype.setName(value)", xmlAttribute_setName);
 		executive->setFunction2("XMLAttribute.prototype.getValue()", xmlAttribute_getValue);
 		executive->setFunction2("XMLAttribute.prototype.setValue(value)", xmlAttribute_setValue);
 		//
-		executive->setFunction2("XMLAttributes.prototype.getIndex()", xmlAttributes_getIndex);
-		executive->setFunction2("XMLAttributes.prototype.setIndex(value)", xmlAttributes_setIndex);
+		executive->setFunction2("XMLAttributes.prototype.getIndex(index)", xmlAttributes_getIndex);
+		executive->setFunction2("XMLAttributes.prototype.setIndex(index,value)", xmlAttributes_setIndex);
 		executive->setFunction2("XMLAttributes.prototype.length()", xmlAttributes_length);
+		executive->setFunction2("XMLAttributes.prototype.removeIndex(index)", xmlAttributes_removeIndex);
+		executive->setFunction2("XMLAttributes.prototype.indexOf(name)", xmlAttributes_indexOf);
+		executive->setFunction2("XMLAttributes.prototype.find(name)", xmlAttributes_find);
+		executive->setFunction2("XMLAttributes.prototype.remove(name)", xmlAttributes_remove);
 		//
 		executive->setFunction2("XMLNode.prototype.getType()", xmlNode_getType);
 		executive->setFunction2("XMLNode.prototype.setType(value)", xmlNode_setType);
@@ -712,6 +983,7 @@ namespace XYO::QuantumScript::Extension::XML {
 		executive->setFunction2("XMLNode.prototype.setBranch(value)", xmlNode_setBranch);
 		//
 		executive->setFunction2("XMLDocument.prototype.save(fileName,parserMode)", xmlDocument_save);
+		executive->setFunction2("XMLDocument.prototype.saveToString(parserMode)", xmlDocument_saveToString);
 		executive->setFunction2("XMLDocument.prototype.length()", xmlDocument_length);
 		executive->setFunction2("XMLDocument.prototype.getIndex(idx)", xmlDocument_getIndex);
 		executive->setFunction2("XMLDocument.prototype.setIndex(idx,value)", xmlDocument_setIndex);
